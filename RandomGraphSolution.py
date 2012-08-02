@@ -118,5 +118,10 @@ def main(script, n=26, p=0.1, num=1, *args):
 
 
 if __name__ == '__main__':
-    import sys
-    main(*sys.argv)
+    #import sys
+    #main(*sys.argv)
+    for p in range(1, 20):
+        p = float(p) / float(20)
+        for n in range(2, 20):
+            print("p: {0}, n: {1}".format(p, n))
+            print(test_p(n, p, 20))
