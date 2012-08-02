@@ -190,6 +190,25 @@ class Graph(dict):
         else:
             return True
 
+    def is_connected(self):
+        verts = self.vertices()
+        queue = [verts[0]]
+        marked = []
+        # while queue is not empty
+        while queue:
+            current = queue[0]
+            marked.append(current)
+            for vert in self.out_vertices(current):
+                if not vert in marked:
+                    queue.append(vert)
+            queue.pop(0)
+        for v in verts:
+            if not v in marked:
+                return False
+        # Run when the for loop has gone through all vertices
+        else:
+            return True
+
 
 def main(script, *args):
     v = Vertex('v')

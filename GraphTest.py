@@ -3,7 +3,7 @@ import GraphWorld
 import string
 
 NODES = 10
-DEGREE = 4
+DEGREE = 2
 RANDOM_P = 0.1
 
 
@@ -13,6 +13,7 @@ def test_regular():
 
     g1 = Graph.Graph(vs1, [])
     g1.add_regular_edges(DEGREE)
+    print("Connected?\n", g1.is_connected())
     lay1 = GraphWorld.CircleLayout(g1)
 
     gw = GraphWorld.GraphWorld()
@@ -33,4 +34,4 @@ def test_random():
     gw.show_graph(g1, lay1)
     gw.mainloop()
 
-test_random()
+test_regular()
