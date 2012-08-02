@@ -7,6 +7,7 @@ http://greenteapress.com/complexity
 Copyright 2011 Allen B. Downey.
 Distributed under the GNU General Public License at gnu.org/licenses/gpl.html.
 """
+import random
 
 class Vertex:
     """A Vertex is a node in a graph."""
@@ -124,7 +125,7 @@ class Graph(dict):
             current = self.get_edge(vert, other)
             if current:
                 all_edges.append(current)
-            print("All edges: ", all_edges)
+            #print("All edges: ", all_edges)
         return all_edges
 
     def add_all_edges(self):
@@ -136,9 +137,37 @@ class Graph(dict):
                 if not v1 == v2:
                     new = Edge(v1, v2)
                     self.add_edge(new)
+    def get_degree(self, vert):
+        """Find the degree of the given vertex"""
+        deg = len(self.out_vertices(vert))
+        return deg
 
     def add_regular_edges(self, degree):
+        """
+        Starts with an edgeless graph, and adds edges so that every vertex
+        has the same degree
+        """
+        regular = False
+        all_vs = self.vertices()
+        while not regular:
+            checkv = random.choice(all_vs)
+            other_vs = all_vs[:]
+            other_vs.remove(checkv)
+            if self.get_degree(checkv) < degree:
+                for other in other_vs:
+                    if self.get_degree(other) < degree:
+                        new = Edge(checkv, other)
+                        break
+                self.add_edge(new)
+            if self.check_regular(degree):
+                regular = True
 
+    def check_regular(self, degree):
+        for v in self.vertices():
+            if not len(self.out_vertices(v)) == degree:
+                return False
+        else:
+            return True
 
             
 
@@ -157,20 +186,25 @@ def main(script, *args):
 
 
 if __name__ == '__main__':
-    import sys
-    main(*sys.argv)
-    print("Tests of new methods:\n")
-    v = Vertex('v')
-    w = Vertex('w')
-    x = Vertex('x')
-    e = Edge(v, w)
-    e2 = Edge(v, x)
-    g1 = Graph([v, w, x], [e, e2])
-    print("get_edge:")
-    print(g1.get_edge(v, w))
-    print("remove_edge: (should return None)")
-    print(g1.remove_edge(e2))
-    print("vertices")
-    print(g1.vertices())
-    print("edges")
-    print(g1.edges())
+#    import sys
+#    main(*sys.argv)
+#    print("Tests of new methods:\n")
+#    v = Vertex('v')
+#    w = Vertex('w')
+#    x = Vertex('x')
+#    e = Edge(v, w)
+#    e2 = Edge(v, x)
+#    g1 = Graph([v, w, x], [e, e2])
+#    print("get_edge:")
+#    print(g1.get_edge(v, w))
+#    print("remove_edge: (should return None)")
+#    print(g1.remove_edge(e2))
+#    print("vertices")
+#    print(g1.vertices())
+#    print("edges")
+#    print(g1.edges())
+    print("Testing add_regular_edges:")
+    chars = 'tuvwxyz'
+    vertices = [Vertex(char) for char in chars]
+    g = Graph(vertices, [])
+    g.add_regular_edges(2)
