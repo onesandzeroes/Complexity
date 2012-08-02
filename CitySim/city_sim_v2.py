@@ -37,8 +37,12 @@ class City:
         rand_x = random.randint(0, self.width -1)
         rand_y = random.randint(0, self.height - 1)
         return (rand_x, rand_y)
-    def populate(self, red_weight=65, blue_weight = 25, empty_weight = 10):
-        weight_list = ['R'] * red_weight + ['B'] * blue_weight + ['.'] * empty_weight
+    def populate(self, red_weight=45, blue_weight = 45, empty_weight = 10):
+        weight_list = (
+            ['R'] * red_weight + ['B'] *
+            blue_weight + 
+            ['.'] * empty_weight
+        )
         for x in range(self.width):
             for y in range(self.height):
                 self[x, y] = random.choice(weight_list)
