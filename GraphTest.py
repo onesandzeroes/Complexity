@@ -2,8 +2,8 @@ import Graph
 import GraphWorld
 import string
 
-NODES = 14
-DEGREE = 2
+NODES = 4
+DEGREE = 4
 
 test1 = string.ascii_lowercase[:NODES]
 vs1 = [Graph.Vertex(v) for v in test1]

@@ -1,4 +1,4 @@
-""" 
+"""
 Code example from Complexity and Computation, a book about
 exploring complexity science with Python.  Available free from
 
@@ -8,6 +8,8 @@ Copyright 2011 Allen B. Downey.
 Distributed under the GNU General Public License at gnu.org/licenses/gpl.html.
 """
 import random
+from textwrap import dedent
+
 
 class Vertex:
     """A Vertex is a node in a graph."""
@@ -22,6 +24,7 @@ class Vertex:
 
     __str__ = __repr__
     """The str and repr forms of this object are the same."""
+
 
 class Edge(tuple):
     """An Edge is a list of two vertices."""
@@ -46,19 +49,19 @@ class Graph(dict):
     A Graph is a dictionary of dictionaries.  The outer
     dictionary maps from a vertex to an inner dictionary.
     The inner dictionary maps from other vertices to edges.
-    
     For vertices a and b, graph[a][b] maps
     to the edge that connects a->b, if it exists.
     """
 
     def __init__(self, vs=[], es=[]):
-        """Creates a new graph.  
+        """
+        Creates a new graph.
         vs: list of vertices;
         es: list of edges.
         """
         for v in vs:
             self.add_vertex(v)
-            
+
         for e in es:
             self.add_edge(e)
 
@@ -137,6 +140,7 @@ class Graph(dict):
                 if not v1 == v2:
                     new = Edge(v1, v2)
                     self.add_edge(new)
+
     def get_degree(self, vert):
         """Find the degree of the given vertex"""
         deg = len(self.out_vertices(vert))
@@ -149,10 +153,27 @@ class Graph(dict):
         """
         regular = False
         all_vs = self.vertices()
+        nodes = len(all_vs)
+        if nodes - degree < 1:
+            print(dedent(
+                """
+                The number of nodes must be higher than the degree
+                """
+            )
+            )
+        if nodes % 2 == 1 and degree % 2 == 1:
+            print(dedent(
+                """
+                Regular graphs aren't possible when both the number
+                of nodes and the degree are odd.
+                """
+            )
+            )
         while not regular:
             checkv = random.choice(all_vs)
             other_vs = all_vs[:]
             other_vs.remove(checkv)
+            random.shuffle(other_vs)
             if self.get_degree(checkv) < degree:
                 for other in other_vs:
                     if self.get_degree(other) < degree:
@@ -169,10 +190,6 @@ class Graph(dict):
         else:
             return True
 
-            
-
-
-
 
 def main(script, *args):
     v = Vertex('v')
@@ -181,7 +198,7 @@ def main(script, *args):
     print(w)
     e = Edge(v, w)
     print(e)
-    g = Graph([v,w], [e])
+    g = Graph([v, w], [e])
     print(g)
 
 
