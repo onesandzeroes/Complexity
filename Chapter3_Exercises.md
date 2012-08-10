@@ -45,3 +45,30 @@ only applies to integer keys, however.
 *square(n)*. However, for a list that's already partly sorted, it can be of
 **O(n)**. Its worst-case performance is much worse than many other sorting 
 algorithms, which have a worst-case performance of **O(n.log(n))**.
+
+3. Radix sort has the best case order of growth of _O(k \* n)_, where *k* is
+the maximum number of digits of the keys being sorted. Radix sort requires
+integer or floating point keys that have *positional notation*, i.e. each
+position in the key identifies a different order of magnitude.
+
+4. A stable sort maintains the original order of items that have equal keys, 
+e.g. when sorting `ad bz ab ce` by the first letter, giving `ad ab bz ce`.
+With an unstable sorting algorithm, a second sort based on a different key
+could destroy the ordering of the first sort. E.g. when sorting by last name,
+then by first name, an unstable sort could destroy the last name ordering
+in the first name sort.
+
+5. The worst named sorting algorithm is bogosort/stupid sort, where the array
+is randomly shuffled, then checked to see if it is in order. It has an average
+order of growth of _O(n \* n!)_, and in the worst case, tends toward infinity.
+
+6. The default sorting algorithm in Python is *timsort*, a hybrid of insertion
+and merge sort that takes advantages of pre-existing ordering in the data.
+It has a best case performance of *O(n)*, and a worst case of *O(nlog(n))*.
+In **C**, the standard library includes quicksort, mergesort and heapsort.
+timsort and mergesort are stable. quicksort can be, but not in its most
+efficient form. heapsort is unstable.
+
+7. Python uses a comparison sort to allow for comparisons of many different
+data-types. Non-comparison sorts such as radix can be faster, but are 
+restricted to sorting numbers.
