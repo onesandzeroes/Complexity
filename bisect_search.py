@@ -12,6 +12,8 @@ def bisect_search(value, seq):
         if halfval == value:
             return halfway
         elif halfval < value:
+            # You've already checked the value of halfway, so start from
+            # the next item
             start = halfway + 1
         elif halfval > value:
             end = halfway
