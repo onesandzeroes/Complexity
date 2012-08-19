@@ -13,8 +13,23 @@ class BTree:
         for item in self.items:
             self.root.add(item)
 
+    def search(self, value):
+        # Start searching from the root node
+        node = self.root
+        found = False
+        while not found:
+            if node.val == value:
+                return True
+            elif value > node.val:
+                node = node.right
+            elif value < node.val:
+                node = node.left
+            if node is None:
+                break
+        return found
+
     def __str__(self):
-        spacing = 80
+        spacing = 40
         final_string = ''
         next_layer = [self.root]
         while True:
@@ -24,7 +39,10 @@ class BTree:
             if len(current_layer) == len(nones):
                 break
             for node in current_layer:
-                final_string += str(node).center(spacing)
+                if not node is None:
+                    final_string += str(node).center(spacing)
+                else:
+                    final_string += ' '.center(spacing)
             final_string += '\n'
             next_layer = []
             for node in current_layer:
@@ -62,3 +80,5 @@ class TreeItem:
 if __name__ == '__main__':
     btree = BTree([8, 10, 3, 1, 6, 14, 4, 7, 13])
     print(btree)
+    print(btree.search(14))
+    print(btree.search(9))
