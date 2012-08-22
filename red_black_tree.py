@@ -35,6 +35,8 @@ class RBTree:
         print(print_col[self.root.left.colour](str(self.root.left.value)))
 
     def rotate(self, node, direction):
+        if node == self.root:
+            reroot_tree = True
         if direction.lower() in ('l', 'left'):
             pivot = node.right
             node.right = pivot.left
@@ -45,6 +47,8 @@ class RBTree:
             node.left = pivot.right
             pivot.right = node
             node = pivot
+        if reroot_tree:
+            self.root = node
 
 
 class RBNode:
