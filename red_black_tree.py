@@ -8,7 +8,7 @@ class RBTree:
         # Create root node with no parent
         self.root = RBNode(None, first, 'B', self)
         for val in vals:
-            self.add(self.root, val)
+            self.root.add(val)
 
     def add(self, target_node, new_val):
         if new_val == target_node.value:
@@ -72,6 +72,24 @@ class RBNode:
 
     def __str__(self):
         return str(self.value)
+
+    def add(self, new_val):
+        if new_val == self.value:
+            print(new_val, " already exists")
+            return
+        if new_val < self.value:
+            if not self.left:
+                self.left = RBNode(self, new_val, 'R', self)
+                # Check if the tree needs to be adjusted after insertion
+                self.left.property_check()
+            else:
+                self.left.add(new_val)
+        elif new_val > self.value:
+            if not self.right:
+                self.right = RBNode(self, new_val, 'R', self)
+                self.right.property_check()
+            else:
+                self.right.add(new_val)
 
     def get_grandparent(self):
         if self.parent:
