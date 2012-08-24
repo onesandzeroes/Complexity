@@ -1,5 +1,6 @@
 #! /usr/bin/env python3
 import blessings
+import math
 
 
 class RBTree:
@@ -28,14 +29,6 @@ class RBTree:
             else:
                 self.add(target_node.right, new_val)
 
-    def colour_print(self):
-        t = blessings.Terminal()
-        print_col = {'R': t.red_on_black, 'B': t.white_on_black}
-        node = self.root
-        val, col = node.colour_str()
-        out = print_col[col](val)
-        print(out)
-
     def rotate(self, node, direction):
         print("Rotating ", direction)
         if node == self.root:
@@ -54,6 +47,44 @@ class RBTree:
             node = pivot
         if reroot_tree:
             self.root = node
+            self.root.colour = 'B'
+            self.root.left.colour = 'R'
+            self.root.right.colour = 'R'
+
+    def show(self, max_width=120, colour=False):
+        whole_text = ''
+        # Choose which str function to use, depending on
+        # whether the colour argument is set
+        if colour:
+            str_f = RBNode.colour_str
+        else:
+            str_f = str
+        all_empty = False
+        next_level = [self.root]
+        while not all_empty:
+            current_level = next_level
+            current_width = max_width // len(current_level)
+            # Strings coloured with the blessings module don't seem to
+            # center properly, so need to use this quirky spacing
+            # logic which isn't ideal
+            l_space = ' ' * math.floor(current_width / 2)
+            r_space = ' ' * math.ceil(current_width / 2)
+            # Need to allow the last level of leaves to print,
+            # so set the flag here
+            if not any(current_level):
+                all_empty = True
+            text = ''
+            next_level = []
+            for node in current_level:
+                text += l_space + str_f(node) + r_space
+                if node:
+                    next_level.append(node.left)
+                    next_level.append(node.right)
+                else:
+                    next_level.append(NoNode())
+                    next_level.append(NoNode())
+            whole_text += text + '\n'
+        return whole_text
 
 
 class RBNode:
@@ -160,13 +191,27 @@ class RBNode:
         Return a tuple containing the value and colour of the node,
         to allow for pretty printing of the tree
         """
-        return (str(self.value), self.colour)
+        t = blessings.Terminal()
+        print_cols = {'R': t.red_on_black, 'B': t.white_on_black}
+        return print_cols[self.colour](str(self.value))
 
 
 class NullNode(RBNode):
     def __init__(self, parent, tree):
         self.colour = 'B'
-        self.value = 'Null'
+        self.value = 'N'
+
+    def __bool__(self):
+        return False
+
+
+class NoNode(RBNode):
+    "Currently only used for easier printing of the tree"
+    def __init__(self):
+        self.colour = 'B'
+        # Make value a space so that it will be spaced in the
+        # same way as other nodes when printing
+        self.value = ' '
 
     def __bool__(self):
         return False
@@ -175,13 +220,12 @@ if __name__ == '__main__':
     tree1 = RBTree([13, 17, 8, 11, 15, 1, 25, 6, 22, 27])
     print(tree1.root)
     tree2 = RBTree([13, 17, 8, 11, 15, 1, 25, 6, 22, 27])
-    tree2.colour_print()
-    tree2.root.colour = 'B'
-    tree2.colour_print()
+    print(tree2.show())
+    print(tree2.show(colour=True))
     print("Testing rotate:")
     tree3 = RBTree([5, 3, 7, 2, 4])
-    print("Before rotation, root: ", tree3.root, "root.left: ",
-          tree3.root.left, "root.right: ", tree3.root.right)
+    print("Before rotation:")
+    print(tree3.show(colour=True))
     tree3.rotate(tree3.root, 'right')
-    print("After rotation, root: ", tree3.root, "root.left: ",
-          tree3.root.left, "root.right: ", tree3.root.right)
+    print("After rotation")
+    print(tree3.show(colour=True))
