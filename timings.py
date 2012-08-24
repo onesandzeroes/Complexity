@@ -37,5 +37,3 @@ pyplot.title('Sum of lists using +=')
 pyplot.xlabel('n')
 pyplot.ylabel('run time (s)')
 pyplot.show()
-input()
-
