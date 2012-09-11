@@ -26,7 +26,7 @@ class BetterMap:
     def __init__(self, n=100):
         self.maps = []
         for i in range(n):
-            self.map.append(LinearMap())
+            self.maps.append(LinearMap())
 
     def find_map(self, k):
         index = hash(k) % len(self.maps)
