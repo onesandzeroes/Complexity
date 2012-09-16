@@ -5,6 +5,7 @@ import os
 import matplotlib.pyplot as pyplot
 from pygraph.classes.graph import graph
 from pygraph.algorithms.generators import generate
+from pygraph.algorithms.searching import breadth_first_search
 
 
 # Dummy visit function, to pass to the bfs functions when testing
@@ -80,6 +81,10 @@ def bfs_markfirst(top_node, visit, graph):
                 queue.append(n)
 
 
+def bfs_pygraph(top_node, visit, graph):
+    breadth_first_search(graph=graph, root=top_node)
+
+
 def gen_alphanum():
     while True:
         for n in string.digits:
@@ -147,5 +152,7 @@ if __name__ == '__main__':
     #               bfs_orig, bfs_fixpop, 100, 1000)
     # compare_funcs("Original (red) vs Using deque() (blue)",
     #               bfs_orig, bfs_deque, 100, 1000)
-    compare_funcs("Original (red) vs Marking nodes first  (blue)",
-                  bfs_orig, bfs_markfirst, 100, 1000)
+    # compare_funcs("Original (red) vs Marking nodes first  (blue)",
+    #               bfs_orig, bfs_markfirst, 100, 1000)
+    compare_funcs("Marking nodes first (red) vs pygraph implementation (blue)",
+                  bfs_markfirst, bfs_pygraph, 100, 1000)
