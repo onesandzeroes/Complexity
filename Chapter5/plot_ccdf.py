@@ -43,6 +43,11 @@ def plot_ccdf_pareto(values, probs, alpha=0):
     ys = [(1 - p) for p in probs]
     log_ys = [math.log(y) if y > 0 else None for y in ys]
     fitted_line = [(-1 * alpha * x) for x in log_xs]
+    pyplot.plot(values, ys, 'ro')
+    pyplot.title("Raw CCDF")
+    pyplot.xlabel("x")
+    pyplot.ylabel("CCDF(x)")
+    pyplot.show()
     pyplot.plot(log_xs, log_ys, 'ro', log_xs, fitted_line, 'b-')
     pyplot.xlabel("Log(x)")
     pyplot.ylabel("Log(y)")
