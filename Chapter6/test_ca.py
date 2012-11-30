@@ -1,5 +1,5 @@
 from CA import CA, CircularCA
-from CADrawer import PyplotDrawer
+from CADrawer import PyplotDrawer, EPSDrawer
 
 
 def first_ca_test():
@@ -24,5 +24,17 @@ def circular_ca_test(n, random_pos=False):
     drawer.draw(ca)
     drawer.show()
 
+
+def test_eps_drawer():
+    ca = CA(50, 20)
+    ca.start_single()
+    ca.loop(19)
+
+    drawer = EPSDrawer()
+    drawer.draw(ca)
+    drawer.save(filename='eps_draw_test.eps')
+
+
 if __name__ == '__main__':
-    circular_ca_test(40, random_pos=True)
+    # circular_ca_test(40, random_pos=True)
+    test_eps_drawer()

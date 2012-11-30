@@ -8,6 +8,7 @@ Distributed under the GNU General Public License at gnu.org/licenses/gpl.html.
 """
 
 import numpy
+import matplotlib.pyplot as pyplot
 
 
 class UnimplementedMethodException(Exception):
@@ -15,7 +16,7 @@ class UnimplementedMethodException(Exception):
     abstract method."""
 
 
-class Drawer(object):
+class Drawer:
     """Drawer is an abstract class that should not be instantiated.
     It defines the interface for a CA drawer; child classes of Drawer
     should implement draw, show and save.
@@ -57,10 +58,11 @@ class PyplotDrawer(Drawer):
     """Implementation of Drawer using matplotlib."""
 
     def __init__(self):
-        # we only need to import pyplot if a PyplotDrawer
-        # gets instantiated
-        global pyplot
-        import matplotlib.pyplot as pyplot
+        # Original file was importimg matplotlib.pyplot here,
+        # but I've just done that at the top of the file,
+        # so don't need to do anything other than making
+        # sure the base class's __init__ method doesn't get run
+        pass
 
     def draw(self, ca, start=0, end=None):
         """Draws the CA using pyplot.pcolor."""
@@ -84,49 +86,6 @@ class PyplotDrawer(Drawer):
     def save(self, filename='ca.png'):
         """save the pseudocolor representation of the CA in (filename)."""
         pyplot.savefig(filename)
-
-
-class PILDrawer(Drawer):
-    """Implementation of Drawer using PIL and Swampy."""
-
-    def __init__(self, csize=4, color='black'):
-        # we only need to import these modules if a PILDrawer
-        # gets instantiated
-        global Image, ImageDraw, ImageTk, Gui
-        import Image
-        import ImageDraw
-        import ImageTk
-        try:
-            import Gui
-        except ImportError:
-            import swampy.Gui
-        self.csize = csize
-        self.color = color
-
-    def draw(self, ca, start=0, end=None):
-        a = ca.get_array(start, end)
-        self.rows, self.cols = a.shape
-        size = [self.cols * self.csize, self.rows * self.csize]
-
-        self.gui = Gui.Gui()
-        self.button = self.gui.bu(command=self.gui.quit)
-
-        self.image = Image.new(mode='1', size=size, color='white')
-        self.drawable = ImageDraw.Draw(self.image)
-        self.draw_array(numpy.flipud(a))
-
-    def draw_cell(self, i, j):
-        size = self.csize
-        x, y = i * size, j * size
-        self.drawable.rectangle([x, y, x + size, y + size], fill=self.color)
-
-    def show(self):
-        self.tkpi = ImageTk.PhotoImage(self.image)
-        self.button.config(image=self.tkpi)
-        self.gui.mainloop()
-
-    def save(self, filename='ca.gif'):
-        self.image.save(filename)
 
 
 class EPSDrawer(Drawer):
@@ -180,3 +139,47 @@ class EPSDrawer(Drawer):
 
     def print_footer(self, fp):
         fp.write('%%EOF\n')
+
+# PIL isn't available for python3, so no real need to keep it around
+
+# class PILDrawer(Drawer):
+#     """Implementation of Drawer using PIL and Swampy."""
+
+#     def __init__(self, csize=4, color='black'):
+#         # we only need to import these modules if a PILDrawer
+#         # gets instantiated
+#         global Image, ImageDraw, ImageTk, Gui
+#         import Image
+#         import ImageDraw
+#         import ImageTk
+#         try:
+#             import Gui
+#         except ImportError:
+#             import swampy.Gui
+#         self.csize = csize
+#         self.color = color
+
+#     def draw(self, ca, start=0, end=None):
+#         a = ca.get_array(start, end)
+#         self.rows, self.cols = a.shape
+#         size = [self.cols * self.csize, self.rows * self.csize]
+
+#         self.gui = Gui.Gui()
+#         self.button = self.gui.bu(command=self.gui.quit)
+
+#         self.image = Image.new(mode='1', size=size, color='white')
+#         self.drawable = ImageDraw.Draw(self.image)
+#         self.draw_array(numpy.flipud(a))
+
+#     def draw_cell(self, i, j):
+#         size = self.csize
+#         x, y = i * size, j * size
+#         self.drawable.rectangle([x, y, x + size, y + size], fill=self.color)
+
+#     def show(self):
+#         self.tkpi = ImageTk.PhotoImage(self.image)
+#         self.button.config(image=self.tkpi)
+#         self.gui.mainloop()
+
+#     def save(self, filename='ca.gif'):
+#         self.image.save(filename)
