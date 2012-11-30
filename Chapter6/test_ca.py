@@ -35,6 +35,29 @@ def test_eps_drawer():
     drawer.save(filename='eps_draw_test.eps')
 
 
+def sierpinski(n):
+    """
+    Rules 18 and 90 should approximate a Sierpinski triangle,
+    testing that here.
+    """
+    ca1 = CA(18, n)
+    ca1.start_single()
+    ca1.loop(n - 1)
+
+    drawer = PyplotDrawer()
+    drawer.draw(ca1)
+    drawer.show()
+
+    ca2 = CA(90, n)
+    ca2.start_single()
+    ca2.loop(n - 1)
+
+    drawer = PyplotDrawer()
+    drawer.draw(ca2)
+    drawer.show()
+
+
 if __name__ == '__main__':
+    sierpinski(65)
     # circular_ca_test(40, random_pos=True)
-    test_eps_drawer()
+    # test_eps_drawer()
